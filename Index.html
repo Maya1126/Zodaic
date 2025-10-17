@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zodiac Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --soft-blue: #a5c9ca;
+      --light-lavender: #e7eaf6;
+      --white: #ffffff;
+      --deep-blue: #395b64;
+      --gray: #50577a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg, var(--light-lavender), var(--soft-blue));
+      color: var(--deep-blue);
+      min-height: 100vh;
+    }
+
+    /* ===== NAVBAR ===== */
+    header {
+      background: var(--white);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 10%;
+    }
+
+    nav h1 {
+      color: var(--deep-blue);
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--gray);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--deep-blue);
+    }
+
+    /* ===== HERO ===== */
+    #home {
+      text-align: center;
+      padding: 120px 10% 60px;
+    }
+
+    #home h2 {
+      font-size: 2rem;
+      color: var(--deep-blue);
+      margin-bottom: 10px;
+    }
+
+    #home p {
+      font-size: 1.1rem;
+      color: var(--gray);
+      margin-bottom: 30px;
+    }
+
+    #searchBar {
+      padding: 10px 15px;
+      width: 90%;
+      max-width: 400px;
+      border: 1px solid #ccc;
+      border-radius: 25px;
+      outline: none;
+    }
+
+    /* ===== ZODIAC GRID ===== */
+    #zodiacs {
+      padding: 60px 10%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
+    }
+
+    .zodiac-card {
+      background: var(--white);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .zodiac-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .zodiac-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+
+    .zodiac-card h3 {
+      margin-top: 10px;
+      color: var(--deep-blue);
+    }
+
+    /* ===== DETAIL SECTION ===== */
+    #details {
+      padding: 60px 10%;
+      background: var(--light-lavender);
+      border-top: 2px solid var(--soft-blue);
+      display: none;
+    }
+
+    #details.active {
+      display: block;
+    }
+
+    #details h2 {
+      margin-bottom: 10px;
+      color: var(--deep-blue);
+    }
+
+    #details p {
+      margin: 8px 0;
+      color: var(--gray);
+    }
+
+    #backBtn {
+      margin-top: 20px;
+      padding: 10px 25px;
+      background: var(--deep-blue);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #backBtn:hover {
+      background: var(--gray);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      background: var(--deep-blue);
+      color: white;
+      padding: 20px;
+      margin-top: 50px;
+    }
+
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <header>
+    <nav>
+      <h1>Zodiac Explorer</h1>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#zodiacs">Zodiacs</a></li>
+        <li><a href="#details">Details</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section id="home">
+    <h2>Discover Your Zodiac Sign 🌙</h2>
+    <p>Explore traits, horoscopes, and compatibility of all zodiac signs.</p>
+    <input type="text" id="searchBar" placeholder="Search zodiac name, behavior, or compatibility...">
+  </section>
+
+  <!-- ===== ZODIAC GRID ===== -->
+  <section id="zodiacs"></section>
+
+  <!-- ===== DETAILS ===== -->
+  <section id="details">
+    <h2 id="zodiacName"></h2>
+    <p id="zodiacMeaning"></p>
+    <p><strong>Good Days:</strong> <span id="goodDays"></span></p>
+    <p><strong>Bad Days:</strong> <span id="badDays"></span></p>
+    <p><strong>Behavior:</strong> <span id="behavior"></span></p>
+    <p><strong>Compatibility:</strong> <span id="compatibility"></span></p>
+    <p><strong>Horoscope:</strong> <span id="horoscope"></span></p>
+    <button id="backBtn">Back to All Signs</button>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <p>© 2025 Zodiac Explorer. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const zodiacData = [
+      { name: "Aries", meaning: "The Ram — symbolizes courage and leadership.", goodDays: "Tuesday, Saturday", badDays: "Wednesday", behavior: "Bold, ambitious, confident, sometimes impulsive.", compatibility: "Leo, Sagittarius, Gemini", horoscope: "A new opportunity will spark excitement. Stay bold, but think twice before rushing.", img: "https://cdn-icons-png.flaticon.com/512/4151/4151022.png" },
+      { name: "Taurus", meaning: "The Bull — symbolizes stability and determination.", goodDays: "Friday, Monday", badDays: "Sunday", behavior: "Patient, dependable, sometimes stubborn.", compatibility: "Virgo, Capricorn, Pisces", horoscope: "Stay steady. A reward is coming for your patience and dedication.", img: "https://cdn-icons-png.flaticon.com/512/4151/4151030.png" },
+      { name: "Gemini", meaning: "The Twins — symbolizes curiosity and adaptability.", goodDays: "Wednesday, Thursday", badDays: "Saturday", behavior: "Quick-witted, charming, sometimes inconsistent.", compatibility: "Libra, Aquarius, Aries", horoscope: "Your energy will attract new ideas — share them wisely.", img: "https://cdn-icons-png.flaticon.com/512/4151/4151050.png" },
+      { name: "Cancer", meaning: "The Crab — symbolizes emotion and intuition.", goodDays: "Monday, Thursday", badDays: "Friday", behavior: "Caring, protective, sometimes moody.", compatibility: "Scorpio, Pisces, Taurus", horoscope: "Focus on family. Your emotional insight brings healing today.", img: "https://cdn-icons-png.flaticon.com/512/4151/4151063.png" },
+      { name: "Leo", meaning: "The Lion — symbolizes confidence and charisma.", goodDays: "Sunday, Tuesday", badDays: "Thursday", behavior: "Generous, creative, loves attention.", compatibility: "Aries, Sagittarius, Libra", horoscope: "Shine bright today — your charm opens unexpected doors.", img: "https://cdn-icons-png.flaticon.com/512/4151/4151073.png" },
+      { name: "Virgo", meaning: "The Maiden — symbolizes logic and perfection.", goodDays: "Wednesday, Friday", badDays: "Sunday", behavior: "Analytical, loyal, sometimes overly critical.", compatibility: "Taurus, Capricorn, Cancer", horoscope: "Order brings peace. Organize your space to clear your mind.", img: "https://cdn-icons-png.flaticon.com/512/4151/4151085.png" },
+      { name: "Libra", meaning: "The Scales — symbolizes balance and beauty.", goodDays: "Friday, Saturday", badDays: "Monday", behavior: "Charming, fair, indecisive.", compatibility: "Gemini, Aquarius, Leo", horoscope: "A balanced decision will lead to lasting harmony.", img: "https://cdn-icons-png.flaticon.com/512/4151/4151097.png" },
+      { name: "Scorpio", meaning: "The Scorpion — symbolizes intensity and transformation.", goodDays: "Tuesday, Thursday", badDays: "Friday", behavior: "Passionate, secretive, determined.", compatibility: "Cancer, Pisces, Virgo", horoscope: "Trust your instincts — transformation is near.", img: "https://cdn-icons-png.flaticon.com/512/4151/4151109.png" },
+      { name: "Sagittarius", meaning: "The Archer — symbolizes freedom and exploration.", goodDays: "Thursday, Sunday", badDays: "Wednesday", behavior: "Optimistic, adventurous, restless.", compatibility: "Aries, Leo, Aquarius", horoscope: "Adventure awaits — say yes to a new opportunity.", img: "https://cdn-icons-png.flaticon.com/512/4151/4151120.png" },
+      { name: "Capricorn", meaning: "The Goat — symbolizes discipline and ambition.", goodDays: "Saturday, Wednesday", badDays: "Monday", behavior: "Practical, disciplined, patient.", compatibility: "Taurus, Virgo, Scorpio", horoscope: "Hard work pays off — stay consistent and grounded.", img: "https://cdn-icons-png.flaticon.com/512/4151/4151132.png" },
+      { name: "Aquarius", meaning: "The Water Bearer — symbolizes innovation and individuality.", goodDays: "Saturday, Thursday", badDays: "Sunday", behavior: "Independent, intelligent, unconventional.", compatibility: "Gemini, Libra, Sagittarius", horoscope: "Innovation thrives today — let your ideas flow freely.", img: "https://cdn-icons-png.flaticon.com/512/4151/4151142.png" },
+      { name: "Pisces", meaning: "The Fish — symbolizes empathy and imagination.", goodDays: "Thursday, Monday", badDays: "Tuesday", behavior: "Dreamy, compassionate, sometimes escapist.", compatibility: "Cancer, Scorpio, Taurus", horoscope: "Listen to your dreams — they carry a message of guidance.", img: "https://cdn-icons-png.flaticon.com/512/4151/4151154.png" }
+    ];
+
+    const zodiacContainer = document.getElementById("zodiacs");
+    const searchBar = document.getElementById("searchBar");
+
+    function renderZodiacs(data) {
+      zodiacContainer.innerHTML = "";
+      data.forEach(sign => {
+        const card = document.createElement("div");
+        card.className = "zodiac-card";
+        card.innerHTML = `<img src="${sign.img}" alt="${sign.name}"><h3>${sign.name}</h3>`;
+        card.addEventListener("click", () => showDetails(sign));
+        zodiacContainer.appendChild(card);
+      });
+    }
+
+    function showDetails(sign) {
+      document.getElementById("details").classList.add("active");
+      document.getElementById("zodiacName").textContent = sign.name;
+      document.getElementById("zodiacMeaning").textContent = sign.meaning;
+      document.getElementById("goodDays").textContent = sign.goodDays;
+      document.getElementById("badDays").textContent = sign.badDays;
+      document.getElementById("behavior").textContent = sign.behavior;
+      document.getElementById("compatibility").textContent = sign.compatibility;
+      document.getElementById("horoscope").textContent = sign.horoscope;
+      document.getElementById("details").scrollIntoView({ behavior: "smooth" });
+    }
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+      document.getElementById("details").classList.remove("active");
+      window.scrollTo({ top: document.getElementById("zodiacs").offsetTop - 50, behavior: "smooth" });
+    });
+
+    searchBar.addEventListener("input", (e) => {
+      const value = e.target.value.toLowerCase();
+      const filtered = zodiacData.filter(sign =>
+        sign.name.toLowerCase().includes(value) ||
+        sign.behavior.toLowerCase().includes(value) ||
+        sign.compatibility.toLowerCase().includes(value)
+      );
+      renderZodiacs(filtered);
+    });
+
+    renderZodiacs(zodiacData);
+  </script>
+</body>
+</html>
